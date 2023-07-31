@@ -1,6 +1,6 @@
 # Med-PaLM
 
-In a world teeming with diverse and critical biomedical data, Med-PaLM offers a groundbreaking solution to the challenge of integrating and interpreting this data. Our cutting-edge AI technology creates an innovative approach for synthesizing patient data into a singular, understandable narrative, revolutionizing the way we diagnose, treat, and understand diseases. This is the promise of Med-PaLM a generalist biomedical AI system, and we are uniquely positioned to make this vision a reality.
+In a world teeming with diverse and critical biomedical data, Med-PaLM offers a groundbreaking solution to the challenge of integrating and interpreting this data. This model is cutting-edge AI technology that creates an innovative approach for synthesizing patient data into a singular, understandable narrative, revolutionizing the way we diagnose, treat, and understand diseases. This is the promise of Med-PaLM a generalist biomedical AI system, and we are uniquely positioned to make this vision a reality
 
 ## Table of Contents
 - [System Architecture](#system-architecture)
@@ -30,15 +30,15 @@ Med-PaLM has a wide range of potential commercial applications, from improving d
 
 The following instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
-[Include instructions here]
-
+# Datasets
+* [Head over to here for a dataset strategy](docs/DATASETS.md)
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
 
-This project is licensed under the [Your preferred license] - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT- see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
