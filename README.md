@@ -30,6 +30,59 @@ Med-PaLM has a wide range of potential commercial applications, from improving d
 
 The following instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
+### Usage
+
+Sure, let's generate a few examples on how to use the `MedPalm` model and the `MedPalmTokenizer`. Note that these examples require that you have the necessary images and texts to be processed. You may also need to adjust the dimensions of your tensors depending on the specific needs of your model. Please install necessary packages for this.
+
+First, let's initialize the tokenizer and the model:
+
+```python
+tokenizer = MedPalmTokenizer()
+model = MedPalm()
+```
+
+Next, let's tokenize a sample of text and an image. For the sake of this example, let's assume we have a dictionary `sample` that contains an image (as a PIL Image or a NumPy array) and the associated text:
+
+```python
+sample = {"image": image, "target_text": "This is a sample text."}
+tokenized_sample = tokenizer.tokenize(sample)
+```
+
+Next, we can feed these tokenized samples into our model:
+
+```python
+text_tokens = tokenized_sample["text_tokens"]
+images = tokenized_sample["images"]
+
+output = model(text_tokens, images)
+```
+
+With `output`, you now have the model's predictions that you can use for further processing or evaluation.
+
+To evaluate various metrics like sequence and scale, you may use the following hypothetical code. Note that actual implementation will depend on your specific metric calculation requirements:
+
+```python
+# Define a function for your metric calculation, e.g., sequence length
+def sequence_length_metric(text_tokens):
+    return len(text_tokens)
+
+# Apply the metric to your data
+sequence_length = sequence_length_metric(text_tokens)
+print(f"Sequence length: {sequence_length}")
+```
+
+```python
+# Define a function for your scale metric, e.g., tensor size
+def tensor_scale_metric(tensor):
+    return tensor.size()
+
+# Apply the metric to your data
+tensor_scale = tensor_scale_metric(images)
+print(f"Tensor scale: {tensor_scale}")
+```
+
+Remember to adjust these examples to fit the specific requirements of your project and data.
+
 # Datasets
 * [Head over to here for a dataset strategy](docs/DATASETS.md)
 ## Contributing
