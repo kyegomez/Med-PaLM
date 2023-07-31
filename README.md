@@ -16,16 +16,6 @@ The primary purpose of Med-PaLM is to bridge the gap between diverse data types 
 
 At the core of the system is a large multimodal generative model which has a flexible structure allowing it to encode and interpret biomedical data. The model is trained on a curated dataset, the MultiMedBench, which includes 14 different tasks such as medical question answering, mammography and dermatology image interpretation, radiology report generation and summarization, and genomic variant calling.
 
-## Commercial Applications
-
-Med-PaLM has a wide range of potential commercial applications, from improving diagnostic accuracy and speed to offering new insights into complex medical cases.
-
-- **Clinical Diagnostics**: With its multimodal approach, Med-PaLM can provide high accuracy diagnostic solutions, integrating information from different sources such as medical imaging, patient history, and genetic data.
-
-- **Healthcare Research**: Med-PaLM's ability to integrate and interpret diverse datasets makes it an invaluable tool in biomedical research, enabling researchers to find novel connections and insights.
-
-- **Telemedicine**: By providing quick and reliable analysis of medical data, Med-PaLM can potentially play a crucial role in telemedicine, helping provide healthcare services remotely.
-
 ## Getting Started
 
 The following instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
@@ -88,6 +78,19 @@ Remember to adjust these examples to fit the specific requirements of your proje
 
 # Datasets
 * [Head over to here for a dataset strategy](docs/DATASETS.md)
+
+## Commercial Applications
+
+Med-PaLM has a wide range of potential commercial applications, from improving diagnostic accuracy and speed to offering new insights into complex medical cases.
+
+- **Clinical Diagnostics**: With its multimodal approach, Med-PaLM can provide high accuracy diagnostic solutions, integrating information from different sources such as medical imaging, patient history, and genetic data.
+
+- **Healthcare Research**: Med-PaLM's ability to integrate and interpret diverse datasets makes it an invaluable tool in biomedical research, enabling researchers to find novel connections and insights.
+
+- **Telemedicine**: By providing quick and reliable analysis of medical data, Med-PaLM can potentially play a crucial role in telemedicine, helping provide healthcare services remotely.
+
+
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
