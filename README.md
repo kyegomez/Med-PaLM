@@ -30,6 +30,9 @@ Med-PaLM has a wide range of potential commercial applications, from improving d
 
 The following instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
+`pip install MedPalm`
+
+
 ### Usage
 
 Sure, let's generate a few examples on how to use the `MedPalm` model and the `MedPalmTokenizer`. Note that these examples require that you have the necessary images and texts to be processed. You may also need to adjust the dimensions of your tensors depending on the specific needs of your model. Please install necessary packages for this.
