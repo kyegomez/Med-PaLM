@@ -12,55 +12,25 @@ The following instructions will help you get a copy of the project up and runnin
 
 ### Usage
 
-Sure, let's generate a few examples on how to use the `MedPalm` model and the `MedPalmTokenizer`. Note that these examples require that you have the necessary images and texts to be processed. You may also need to adjust the dimensions of your tensors depending on the specific needs of your model. Please install necessary packages for this.
-
-First, let's initialize the tokenizer and the model:
 
 ```python
-tokenizer = MedPalmTokenizer()
+import torch
+from med_palm import MedPalm
+
+# Initialize the model
 model = MedPalm()
-```
 
-Next, let's tokenize a sample of text and an image. For the sake of this example, let's assume we have a dictionary `sample` that contains an image (as a PIL Image or a NumPy array) and the associated text:
+# Assume we have tokenized inputs
+text_tokens = torch.tensor([[1, 2, 3, 4, 5]])  # Example tensor, replace with your actual tensor
+images = torch.randn(1, 3, 224, 224)  # Example tensor, replace with your actual tensor
 
-```python
-sample = {"image": image, "target_text": "This is a sample text."}
-tokenized_sample = tokenizer.tokenize(sample)
-```
-
-Next, we can feed these tokenized samples into our model:
-
-```python
-text_tokens = tokenized_sample["text_tokens"]
-images = tokenized_sample["images"]
-
+# Perform a forward pass on the model
 output = model(text_tokens, images)
+
+# Now `output` contains the model's predictions
+print(output)
+
 ```
-
-With `output`, you now have the model's predictions that you can use for further processing or evaluation.
-
-To evaluate various metrics like sequence and scale, you may use the following hypothetical code. Note that actual implementation will depend on your specific metric calculation requirements:
-
-```python
-# Define a function for your metric calculation, e.g., sequence length
-def sequence_length_metric(text_tokens):
-    return len(text_tokens)
-
-# Apply the metric to your data
-sequence_length = sequence_length_metric(text_tokens)
-print(f"Sequence length: {sequence_length}")
-```
-
-```python
-# Define a function for your scale metric, e.g., tensor size
-def tensor_scale_metric(tensor):
-    return tensor.size()
-
-# Apply the metric to your data
-tensor_scale = tensor_scale_metric(images)
-print(f"Tensor scale: {tensor_scale}")
-```
-
 Remember to adjust these examples to fit the specific requirements of your project and data.
 
 # Datasets
