@@ -67,7 +67,7 @@ class MedPalmTokenizer:
         
 class MedPalm(nn.Module):
     def __init__(self, 
-                 num_tokens: int = 1024, 
+                 num_tokens: int = 50528, 
                  dim: int = 2048, 
                  depth: int = 16, 
                  dim_head:int =  128, 
@@ -133,9 +133,10 @@ class MedPalm(nn.Module):
     def forward(self, text_tokens, images):
         try:
                 
-            images = images.view(images.size(0), -1)  # Flatten the images
+            # images = images.view(images.size(0), -1)  # Flatten the images
             # images = self.image_resize(images)  # Resize the images using the linear transformation layer
-            images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
+            # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
+            images = self.vit_model(pixel_values=images)["last_hidden_state"]
 
             images = self.perceive(images).squeeze(1)
             print(f"Images perceive: {images}")
