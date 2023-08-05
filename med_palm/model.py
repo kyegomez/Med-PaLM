@@ -70,7 +70,7 @@ class MedPalm(nn.Module):
         super(MedPalm, self).__init__()
         try:
 
-            self.ViT_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
+            self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
             self.embed = bitsandbytes.nn.modules.Embedding(
                 32002,
@@ -119,7 +119,7 @@ class MedPalm(nn.Module):
             # images = self.perceive(images).squeeze(1)
             # images = self.image_proj(images)
             # images_flattened = images.view(images.size(0), -1)
-            images = self.clip_model(pixel_values=images)["last_hidden_state"]
+            images = self.vit_model(pixel_values=images)["last_hidden_state"]
             images = self.perceive(images).squeeze(1)
             images = self.image_proj(images)
 
