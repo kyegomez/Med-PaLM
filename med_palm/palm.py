@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from med_palm.attention import Attention
 from med_palm.utils import eval_decorator, gumbel_sample, top_k
+from med_palm.lora import Lora
 
 # functions and decorators
 
@@ -341,10 +342,10 @@ class PaLM(nn.Module):
 
         for _ in range(len(self.layers)):
             lora_modules.append(nn.ModuleList([
-                LoRA(dim, q_inner_dim, r = r),   # queries
-                LoRA(dim, kv_inner_dim, r = r),  # keys
-                LoRA(dim, kv_inner_dim, r = r),  # values
-                LoRA(q_inner_dim, dim, r = r)    # wo
+                Lora(dim, q_inner_dim, r = r),   # queries
+                Lora(dim, kv_inner_dim, r = r),  # keys
+                Lora(dim, kv_inner_dim, r = r),  # values
+                Lora(q_inner_dim, dim, r = r)    # wo
             ]))
 
         self.finetune_modules[scope] = lora_modules.to(device)
