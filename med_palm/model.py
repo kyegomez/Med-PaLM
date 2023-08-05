@@ -345,52 +345,65 @@ class MedPalm(nn.Module):
 
     def forward(self, text_tokens, images):
         try:
-            images = images.mean(dim=1, keepdim=True) #average the numb channels dimension
+            # Average the number of channels dimension
+            images = images.mean(dim=1, keepdim=True)
             print(f'images1st mean: {images.shape}')
 
-            images = images.view(images.size(0), -1)  # Flatten the images
+            # Flatten the images
+            images = images.view(images.size(0), -1)
             print(f"Images shape before resize: {images.shape}")
 
-            
+            # Check if images have the correct shape for image_resize
             if images.size(-1) != self.image_resize.in_features:
                 print(f"Error: images has incorrect shape for image_resize. Expected last dimension: {self.image_resize.in_features}, got: {images.size(-1)}")
                 return None
+
+            # Resize the images
             images = self.image_resize(images)
 
-            images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
-
+            # Reshape the images to the expected size
+            images = images.view(images.size(0), 3, 1024, 1024)
+            
+            # Apply the PerceiverResampler to the images
             images = self.perceive(images).squeeze(1)
             print(f"Images perceive: {images}")
 
+            # Check if images have the correct shape for image_proj
             print(f"Images shape before proj: {images.shape}")
             if images.size(-1) != self.image_proj.in_features:
                 print(f"Error: images has incorrect shape for image_proj. Expected last dimension: {self.image_proj.in_features}, got: {images.size(-1)}")
                 return None
-            images = self.image_proj(images)
 
+            # Project the images
             images = self.image_proj(images)
             print(f"Images projected: {images}")
 
+            # Flatten the images
             images_flattened = images.view(images.size(0), -1)
             print(f"Images flattened: {images_flattened}")
 
+            # Pass the text tokens through the decoder
             model_input = self.decoder(text_tokens)
             print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
 
+            # Reshape the flattened images
             images_flattened = images_flattened.view(1, 2, -1)
             print(f"Images flattened: {images_flattened}")
 
+            # Concatenate the model input and the flattened images
             model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
             print(f"Model input: {model_input}")
 
+            # Pass the model input through the decoder
             model_input = self.decoder(model_input, tokens_mask=None)
             print(f"Model input: {model_input}")
 
+            # Get the output from the decoder
             output = self.decoder(model_input, passed_x=model_input)[0]
             print(f"output: {output}")
 
             return output
         
         except Exception as e:
-            print(f"Error duing forward pass: {e}")
+            print(f"Error during forward pass: {e}")
             return None
