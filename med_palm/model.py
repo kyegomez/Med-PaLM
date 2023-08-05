@@ -67,7 +67,7 @@ class MedPalmTokenizer:
         
 class MedPalm(nn.Module):
     def __init__(self, 
-                 num_tokens: int = 50528, 
+                 num_tokens: int = 1024, 
                  dim: int = 2048, 
                  depth: int = 16, 
                  dim_head:int =  128, 
