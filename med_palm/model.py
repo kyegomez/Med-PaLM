@@ -419,6 +419,8 @@ class MedPalm(nn.Module):
             # Pass the text tokens through the decoder
             model_input = self.decoder(text_tokens)
 
+            images = images.view(images.size(0), -1, 8)
+
             # Concatenate the model input and the images
             model_input = torch.cat([model_input, images], dim=-1)
 
