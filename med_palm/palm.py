@@ -1,18 +1,15 @@
-from pathlib import Path
 from itertools import zip_longest
-
-from tqdm import tqdm
-from beartype import beartype
+from pathlib import Path
 
 import torch
-from torch import nn
 import torch.nn.functional as F
-
-from einops import rearrange, pack, unpack
+from beartype import beartype
+from einops import pack, rearrange, unpack
+from torch import nn
+from tqdm import tqdm
 
 from med_palm.attention import Attention
-from med_palm.utils import top_k, gumbel_sample, eval_decorator
-from med_palm.lora import Lora
+from med_palm.utils import eval_decorator, gumbel_sample, top_k
 
 # functions and decorators
 

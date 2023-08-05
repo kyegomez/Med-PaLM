@@ -1,30 +1,26 @@
-import math
-from pathlib import Path
 import copy
-from tqdm import tqdm
-from functools import partial
+import math
 from collections import deque, namedtuple
+from functools import partial
+from pathlib import Path
 from random import randrange
 
-from beartype import beartype
-from beartype.typing import List, Optional, Callable, Deque
-
 import torch
-from torch import nn
 import torch.nn.functional as F
-
-from torch.utils.data import Dataset, DataLoader
-from torch.nn.utils.rnn import pad_sequence
-
+from accelerate import Accelerator
+from beartype import beartype
+from beartype.typing import Callable, Deque, List, Optional
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
+from torch import nn
+from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import DataLoader, Dataset
+from tqdm import tqdm
 
+from med_palm.optimizer import get_optimizer
 from med_palm.palm import PaLM
 from med_palm.reward import RewardModel
-from med_palm.optimizer import get_optimizer
-from med_palm.utils import masked_mean, eval_decorator
-
-from accelerate import Accelerator
+from med_palm.utils import eval_decorator, masked_mean
 
 # actor critic - PaLM with lora
 

@@ -5,7 +5,6 @@ import torch.nn.functional as F
 from einops import rearrange
 
 
-
 # helpers
 def exists(val):
     return val is not None

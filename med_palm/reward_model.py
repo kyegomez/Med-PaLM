@@ -1,17 +1,15 @@
 import copy
 from pathlib import Path
 
-from beartype import beartype
-
 import torch
-from torch import nn
 import torch.nn.functional as F
-
+from beartype import beartype
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
+from torch import nn
 
-from med_palm.utils import masked_mean, gumbel_sample
 from med_palm.palm import PaLM
+from med_palm.utils import gumbel_sample, masked_mean
 
 # helper functions
 

@@ -28,5 +28,5 @@ for text in texts:
     
     print(f"Text: {text}")
     print(f"Number of tokens: {text_tokens.shape[1]}")
-    print(f"Output size: {output.shape}")
+    print(f"Output size: {output}")
     print("\n-----\n")
