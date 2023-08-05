@@ -7,7 +7,7 @@ tokenizer = MedPalmTokenizer()
 model = MedPalm()
 
 # Load the image
-image = PIL.Image.open('path_to_your_image.jpg')
+image = PIL.Image.open('image-9.png')
 
 # Create a list of different length text sequences for testing
 texts = ["This is a short sequence.",
