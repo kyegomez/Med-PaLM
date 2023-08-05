@@ -71,7 +71,7 @@ class MedPalm(nn.Module):
         super(MedPalm, self).__init__()
         try:
 
-            self.vit_module = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
+            self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
             self.embed = bitsandbytes.nn.modules.Embedding(
                 32002,
