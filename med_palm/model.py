@@ -308,14 +308,8 @@ class MedPalm(nn.Module):
 
             self.ViT_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
-            self.embed = bitsandbytes.nn.modules.Embedding(
-                32002,
-                2048,
-                padding_idx=1
-            )
-
             self.output_projection = torch.nn.Linear(
-                2048, 32002, bias=False
+                2048, 50304, bias=False
             )
             torch.nn.init.normal_(
                 self.output_projection.weight, mean=0, std=2048**-0.5
