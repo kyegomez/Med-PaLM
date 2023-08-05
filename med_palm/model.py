@@ -104,7 +104,7 @@ class MedPalm(nn.Module):
                 num_media_embeds = 257
             )
 
-            self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
+            # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
 
             self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
             torch.nn.init.normal_(
