@@ -209,10 +209,10 @@ class MedPalm(nn.Module):
         print(f'1st images shape in vit: {images}')
 
         images = self.perceive(images).squeeze(1)
-        print(f'self perceive: {images}')
+        print(f'self perceive: {images.shape}')
 
         images = self.image_proj(images)
-        print(f'projection layer :{images}')
+        print(f'projection layer :{images.shape}')
 
         model_input = self.decoder(text_tokens)
 
@@ -221,13 +221,13 @@ class MedPalm(nn.Module):
             return None
 
         model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
-        print(f"Model input: {model_input}")
+        print(f"Model input: {model_input.shape}")
 
         model_input = self.decoder(model_input, tokens_mask=None)
-        print(f"Model input: {model_input}")
+        print(f"Model input: {model_input.shape}")
 
         output = self.decoder(model_input, passed_x=model_input)[0]
-        print(f"output: {output}")
+        print(f"output: {output.shape}")
 
         
 
