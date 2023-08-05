@@ -137,10 +137,10 @@ class MedPalm(nn.Module):
             # images = self.image_resize(images)  # Resize the images using the linear transformation layer
             # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
-
+            print(f'Images first" {images.shape}')
+            
             images = self.perceive(images).squeeze(1)
             print(f"Images perceive: {images}")
-
             images = self.image_proj(images)
             print(f"Images projected: {images}")
 
