@@ -144,16 +144,16 @@ class MedPalm(nn.Module):
             images = self.image_proj(images)
             print(f"Images projected: {images}")
 
-            images_flattened = images.view(images.size(0), -1)
-            print(f"Images flattened: {images_flattened}")
+            # images_flattened = images.view(images.size(0), -1)
+            # print(f"Images flattened: {images_flattened}")
 
             model_input = self.decoder(text_tokens)
             print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
 
-            images_flattened = images_flattened.view(1, 2, -1)
-            print(f"Images flattened: {images_flattened}")
+            # images_flattened = images_flattened.view(1, 2, -1)
+            # print(f"Images flattened: {images_flattened}")
 
-            model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
+            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
             print(f"Model input: {model_input}")
 
             model_input = self.decoder(model_input, tokens_mask=None)
