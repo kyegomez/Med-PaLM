@@ -306,7 +306,7 @@ class MedPalm(nn.Module):
         super(MedPalm, self).__init__()
         try:
 
-            self.ViT_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
+            self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
             self.output_projection = torch.nn.Linear(
                 2048, 50304, bias=False
@@ -326,7 +326,7 @@ class MedPalm(nn.Module):
             )
 
             self.perceive = PerceiverResampler(
-                dim= 1024,
+                dim = 1024,
                 depth = 2,
                 dim_head = 8,
                 num_latents = 64,
@@ -407,9 +407,8 @@ class MedPalm(nn.Module):
     #         return None
     def forward(self, text_tokens, images):
         try:
-            # # Flatten the images
             # images = images.view(images.size(0), -1)
-            images = self.ViT_model(pixel_values=images)["last_hidden_state"]
+            images = self.vit_model(pixel_values=images)["last_hidden_state"]
 
             # Apply the PerceiverResampler to the images
             images = self.perceive(images).squeeze(1)
