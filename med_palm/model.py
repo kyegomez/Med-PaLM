@@ -128,50 +128,50 @@ class MedPalm(nn.Module):
             print(f"Error initlizing palme components: {e}")
 
     def forward(self, text_tokens, images):
-        try:
+        # try:
                 
-            # images = images.view(images.size(0), -1)  # Flatten the images
-            # images = self.image_resize(images)  # Resize the images using the linear transformation layer
-            # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
+        #     # images = images.view(images.size(0), -1)  # Flatten the images
+        #     # images = self.image_resize(images)  # Resize the images using the linear transformation layer
+        #     # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
             
-            images = self.vit_model(pixel_values=images)["last_hidden_state"]
-            print(f'Images first" {images.shape}')
+        #     images = self.vit_model(pixel_values=images)["last_hidden_state"]
+        #     print(f'Images first" {images.shape}')
             
-            images = self.perceive(images).squeeze(1)
-            print(f"Images perceive: {images}")
+        #     images = self.perceive(images).squeeze(1)
+        #     print(f"Images perceive: {images}")
             
-            images = self.image_proj(images)
-            print(f"Images projected: {images}")
+        #     images = self.image_proj(images)
+        #     print(f"Images projected: {images}")
 
-            # images_flattened = images.view(images.size(0), -1)
-            # print(f"Images flattened: {images_flattened}")
+        #     # images_flattened = images.view(images.size(0), -1)
+        #     # print(f"Images flattened: {images_flattened}")
 
-            model_input = self.decoder(text_tokens)
+        #     model_input = self.decoder(text_tokens)
 
-            print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
+        #     print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
 
-            # images_flattened = images_flattened.view(1, 2, -1)
-            # print(f"Images flattened: {images_flattened}")
+        #     # images_flattened = images_flattened.view(1, 2, -1)
+        #     # print(f"Images flattened: {images_flattened}")
 
 
-            if model_input.size(1) < 3:
-                print(f"Error model_input has less than 3 columns: {model_input.shape}")
-                return None
+        #     if model_input.size(1) < 3:
+        #         print(f"Error model_input has less than 3 columns: {model_input.shape}")
+        #         return None
 
-            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
-            print(f"Model input: {model_input}")
+        #     model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
+        #     print(f"Model input: {model_input}")
 
-            model_input = self.decoder(model_input, tokens_mask=None)
-            print(f"Model input: {model_input}")
+        #     model_input = self.decoder(model_input, tokens_mask=None)
+        #     print(f"Model input: {model_input}")
 
-            output = self.decoder(model_input, passed_x=model_input)[0]
-            print(f"output: {output}")
+        #     output = self.decoder(model_input, passed_x=model_input)[0]
+        #     print(f"output: {output}")
 
-            return output
+        #     return output
         
-        except Exception as e:
-            print(f"Error duing forward pass: {e}")
-            return None
+        # except Exception as e:
+        #     print(f"Error duing forward pass: {e}")
+        #     return None
 
 
         ######################## v2
@@ -204,4 +204,30 @@ class MedPalm(nn.Module):
         # print(f'output: {output}')
 
         # return output
+
+        images = self.vit_model(pixel_values=images)["last_hidden_state"]
+        print(f'1st images shape in vit: {images}')
+
+        images = self.perceive(images).squeeze(1)
+        print(f'self perceive: {images}')
+
+        images = self.image_proj(images)
+        print(f'projection layer :{images}')
+
+        model_input = self.decoder(text_tokens)
+
+        if model_input.size(1) < 3:
+            print(f"Error model_input has less than 3 columns: {model_input.shape}")
+            return None
+
+        model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
+        print(f"Model input: {model_input}")
+
+        model_input = self.decoder(model_input, tokens_mask=None)
+        print(f"Model input: {model_input}")
+
+        output = self.decoder(model_input, passed_x=model_input)[0]
+        print(f"output: {output}")
+
+        
 
