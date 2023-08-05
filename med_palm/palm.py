@@ -12,7 +12,7 @@ from einops import rearrange, pack, unpack
 
 from med_palm.attention import Attention
 from med_palm.utils import top_k, gumbel_sample, eval_decorator
-from med_palm.lora import LoRA
+from med_palm.lora import Lora
 
 # functions and decorators
 

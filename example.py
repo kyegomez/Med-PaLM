@@ -1,5 +1,4 @@
 import PIL.Image
-from matplotlib import pyplot as plt
 
 from med_palm.model import MedPalmTokenizer, MedPalm
 
