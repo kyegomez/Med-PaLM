@@ -409,7 +409,7 @@ class MedPalm(nn.Module):
         try:
             # # Flatten the images
             # images = images.view(images.size(0), -1)
-            images = self.clip_model(pixel_values=images)["last_hidden_state"]
+            images = self.ViT_model(pixel_values=images)["last_hidden_state"]
 
             # Apply the PerceiverResampler to the images
             images = self.perceive(images).squeeze(1)
