@@ -407,32 +407,21 @@ class MedPalm(nn.Module):
     #         return None
     def forward(self, text_tokens, images):
         try:
-            # Average the number of channels dimension
-            images = images.mean(dim=1, keepdim=True)
+            # # Flatten the images
+            # images = images.view(images.size(0), -1)
+            images = self.clip_model(pixel_values=images)["last_hidden_state"]
 
-            # Flatten the images
-            images = images.view(images.size(0), -1)
-
-            # Reshape the images to the expected size
-            images = images.view(images.size(0), 3, 224, 224)
-            
             # Apply the PerceiverResampler to the images
             images = self.perceive(images).squeeze(1)
 
             # Project the images
             images = self.image_proj(images)
 
-            # Flatten the images
-            images_flattened = images.view(images.size(0), -1)
-
             # Pass the text tokens through the decoder
             model_input = self.decoder(text_tokens)
 
-            # Reshape the flattened images
-            images_flattened = images_flattened.view(1, 2, -1)
-
-            # Concatenate the model input and the flattened images
-            model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
+            # Concatenate the model input and the images
+            model_input = torch.cat([model_input, images], dim=-1)
 
             # Pass the model input through the decoder
             model_input = self.decoder(model_input, tokens_mask=None)
