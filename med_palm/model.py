@@ -11,7 +11,6 @@ from med_palm.palm import PaLM
 class MedPalmTokenizer:
     def __init__(self):
         try:
-
             self.processor = CLIPProcessor.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K")
             self.tokenizer = AutoTokenizer.from_pretrained(
                 "EleutherAI/gpt-neox-20b",
@@ -34,9 +33,7 @@ class MedPalmTokenizer:
             image_tokens = torch.tensor([[self.im_idx, self.im_end_idx]] * texts.shape[0])
             return torch.cat([texts[:, 0:1], image_tokens, texts[:, 1:]], dim=1), texts
         except Exception as e:
-            print(f"Error tokenizing texts: {e}")
-
-        
+            print(f"Error tokenizing texts: {e}")        
 
     def tokenize_images(self, images):
         try:
@@ -113,7 +110,7 @@ class MedPalm(nn.Module):
             )
 
             self.perceive = PerceiverResampler(
-                dim= dim,
+                dim= 1024,
                 depth = 2,
                 dim_head = 8,
                 num_latents = 64,
@@ -122,7 +119,7 @@ class MedPalm(nn.Module):
 
             # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
 
-            self.image_proj = torch.nn.Linear(dim, dim, bias=False)
+            self.image_proj = torch.nn.Linear(1024, dim, bias=False)
             torch.nn.init.normal_(
                 self.image_proj.weight, mean=0, std=dim**-0.5
             )
@@ -141,7 +138,7 @@ class MedPalm(nn.Module):
             
             images = self.perceive(images).squeeze(1)
             print(f"Images perceive: {images}")
-
+            
             images = self.image_proj(images)
             print(f"Images projected: {images}")
 
@@ -201,4 +198,3 @@ class MedPalm(nn.Module):
 
         # return output
 
-    
