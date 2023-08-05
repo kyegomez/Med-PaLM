@@ -113,7 +113,7 @@ class MedPalm(nn.Module):
             )
 
             self.perceive = PerceiverResampler(
-                dim= 1024,
+                dim= dim,
                 depth = 2,
                 dim_head = 8,
                 num_latents = 64,
@@ -122,7 +122,7 @@ class MedPalm(nn.Module):
 
             # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
 
-            self.image_proj = torch.nn.Linear(1024, dim, bias=False)
+            self.image_proj = torch.nn.Linear(dim, dim, bias=False)
             torch.nn.init.normal_(
                 self.image_proj.weight, mean=0, std=dim**-0.5
             )
@@ -141,6 +141,7 @@ class MedPalm(nn.Module):
             
             images = self.perceive(images).squeeze(1)
             print(f"Images perceive: {images}")
+
             images = self.image_proj(images)
             print(f"Images projected: {images}")
 
