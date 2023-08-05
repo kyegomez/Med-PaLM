@@ -133,6 +133,7 @@ class MedPalm(nn.Module):
             # images = images.view(images.size(0), -1)  # Flatten the images
             # images = self.image_resize(images)  # Resize the images using the linear transformation layer
             # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
+            
             images = self.vit_model(pixel_values=images)["last_hidden_state"]
             print(f'Images first" {images.shape}')
             
@@ -146,10 +147,16 @@ class MedPalm(nn.Module):
             # print(f"Images flattened: {images_flattened}")
 
             model_input = self.decoder(text_tokens)
+
             print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
 
             # images_flattened = images_flattened.view(1, 2, -1)
             # print(f"Images flattened: {images_flattened}")
+
+
+            if model_input.size(1) < 3:
+                print(f"Error model_input has less than 3 columns: {model_input.shape}")
+                return None
 
             model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
             print(f"Model input: {model_input}")
