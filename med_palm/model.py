@@ -154,36 +154,31 @@ class MedPalm(nn.Module):
         if not isinstance(text_tokens, torch.Tensor) or not isinstance(images, torch.Tensor):
             raise TypeError("text_tokens and images must be instances of torch.Tensor")
         
-        print(images.shape)
+        print(f'RAWWWW IMAGE SHAPE: {images.shape}')
+    
 
         images = self.vit_model(pixel_values=images)["last_hidden_state"]
-        print(images)
+        print(f'1st images shape in vit: {images}')
 
         images = self.perceive(images).squeeze(1)
-        print(images)
+        print(f'self perceive: {images}')
 
         images = self.image_proj(images)
-        print(images)
+        print(f'projection layer :{images}')
 
 
         model_input = self.decoder(text_tokens)
-        print(model_input)
+        print(f'1ST MODEL INPUT {model_input}')
 
         model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
-        print(model_input)
+        print(f'MODEL INPUT : {model_input}')
 
         model_input = self.decoder(model_input, tokens_mask=None)
-        print(model_input)
+        print(f'model_input: {model_input}')
 
         output = self.decoder(model_input, passed_x=model_input)[0]
-        print(output)
+        print(f'output: {output}')
 
         return output
 
-        
-
-
-
-
-
-
+    
