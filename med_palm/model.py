@@ -103,8 +103,6 @@ class MedPalm(nn.Module):
                 num_media_embeds = 257
             )
 
-            # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
-
             self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
             torch.nn.init.normal_(
                 self.image_proj.weight, mean=0, std=2048**-0.5
@@ -116,33 +114,24 @@ class MedPalm(nn.Module):
     def forward(self, text_tokens, images):
         try:
                 
-            images = images.view(images.size(0), -1)  # Flatten the images
-            images = self.image_resize(images)  # Resize the images using the linear transformation layer
-            images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
-
+            # images = images.view(images.size(0), -1)  # Flatten the images
+            # images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
+            # images = self.perceive(images).squeeze(1)
+            # images = self.image_proj(images)
+            # images_flattened = images.view(images.size(0), -1)
+            images = self.clip_model(pixel_values=images)["last_hidden_state"]
             images = self.perceive(images).squeeze(1)
-            print(f"Images perceive: {images}")
-
             images = self.image_proj(images)
-            print(f"Images projected: {images}")
-
-            images_flattened = images.view(images.size(0), -1)
-            print(f"Images flattened: {images_flattened}")
 
             model_input = self.decoder(text_tokens)
-            print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
 
-            images_flattened = images_flattened.view(1, 2, -1)
-            print(f"Images flattened: {images_flattened}")
+            # images_flattened = images_flattened.view(1, 2, -1)
 
-            model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
-            print(f"Model input: {model_input}")
+            model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=-1)
 
             model_input = self.decoder(model_input, tokens_mask=None)
-            print(f"Model input: {model_input}")
 
             output = self.decoder(model_input, passed_x=model_input)[0]
-            print(f"output: {output}")
 
             return output
         
