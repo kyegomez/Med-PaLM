@@ -87,7 +87,7 @@ class MedPalm(nn.Module):
             )
 
             self.decoder = PaLM(
-                num_tokens=50304,
+                num_tokens=1024,
                 dim=2048,
                 depth=16,
                 dim_head=128,
