@@ -115,70 +115,72 @@ class MedPalm(nn.Module):
             print(f"Error initlizing palme components: {e}")
 
     def forward(self, text_tokens, images):
-        # try:
+        try:
                 
-        #     images = images.view(images.size(0), -1)  # Flatten the images
-        #     images = self.image_resize(images)  # Resize the images using the linear transformation layer
-        #     images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
+            images = images.view(images.size(0), -1)  # Flatten the images
+            # images = self.image_resize(images)  # Resize the images using the linear transformation layer
+            images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
 
-        #     images = self.perceive(images).squeeze(1)
-        #     print(f"Images perceive: {images}")
+            images = self.perceive(images).squeeze(1)
+            print(f"Images perceive: {images}")
 
-        #     images = self.image_proj(images)
-        #     print(f"Images projected: {images}")
+            images = self.image_proj(images)
+            print(f"Images projected: {images}")
 
-        #     images_flattened = images.view(images.size(0), -1)
-        #     print(f"Images flattened: {images_flattened}")
+            images_flattened = images.view(images.size(0), -1)
+            print(f"Images flattened: {images_flattened}")
 
-        #     model_input = self.decoder(text_tokens)
-        #     print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
+            model_input = self.decoder(text_tokens)
+            print(model_input[:, 0:2].shape, images.shape, model_input[:, 2:].shape)
 
-        #     images_flattened = images_flattened.view(1, 2, -1)
-        #     print(f"Images flattened: {images_flattened}")
+            images_flattened = images_flattened.view(1, 2, -1)
+            print(f"Images flattened: {images_flattened}")
 
-        #     model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
-        #     print(f"Model input: {model_input}")
+            model_input = torch.cat([model_input[:, 0:2], images_flattened, model_input[:, 2:]], dim=-1)
+            print(f"Model input: {model_input}")
 
-        #     model_input = self.decoder(model_input, tokens_mask=None)
-        #     print(f"Model input: {model_input}")
+            model_input = self.decoder(model_input, tokens_mask=None)
+            print(f"Model input: {model_input}")
 
-        #     output = self.decoder(model_input, passed_x=model_input)[0]
-        #     print(f"output: {output}")
+            output = self.decoder(model_input, passed_x=model_input)[0]
+            print(f"output: {output}")
 
-        #     return output
+            return output
         
-        # except Exception as e:
-        #     print(f"Error duing forward pass: {e}")
-        #     return None
+        except Exception as e:
+            print(f"Error duing forward pass: {e}")
+            return None
 
-        if not isinstance(text_tokens, torch.Tensor) or not isinstance(images, torch.Tensor):
-            raise TypeError("text_tokens and images must be instances of torch.Tensor")
+
+        ######################## v2
+        # if not isinstance(text_tokens, torch.Tensor) or not isinstance(images, torch.Tensor):
+        #     raise TypeError("text_tokens and images must be instances of torch.Tensor")
         
-        print(f'RAWWWW IMAGE SHAPE: {images.shape}')
+        # print(f'RAWWWW IMAGE SHAPE: {images.shape}')
     
 
-        images = self.vit_model(pixel_values=images)["last_hidden_state"]
-        print(f'1st images shape in vit: {images}')
+        # images = self.vit_model(pixel_values=images)["last_hidden_state"]
+        # print(f'1st images shape in vit: {images}')
 
-        images = self.perceive(images).squeeze(1)
-        print(f'self perceive: {images}')
+        # images = self.perceive(images).squeeze(1)
+        # print(f'self perceive: {images}')
 
-        images = self.image_proj(images)
-        print(f'projection layer :{images}')
+        # images = self.image_proj(images)
+        # print(f'projection layer :{images}')
 
 
-        model_input = self.decoder(text_tokens)
-        print(f'1ST MODEL INPUT {model_input}')
+        # model_input = self.decoder(text_tokens)
+        # print(f'1ST MODEL INPUT {model_input}')
 
-        model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
-        print(f'MODEL INPUT : {model_input}')
+        # model_input = torch.cat([model_input[:, 0:2], images, model_input[:, 2:]], dim=1)
+        # print(f'MODEL INPUT : {model_input}')
 
-        model_input = self.decoder(model_input, tokens_mask=None)
-        print(f'model_input: {model_input}')
+        # model_input = self.decoder(model_input, tokens_mask=None)
+        # print(f'model_input: {model_input}')
 
-        output = self.decoder(model_input, passed_x=model_input)[0]
-        print(f'output: {output}')
+        # output = self.decoder(model_input, passed_x=model_input)[0]
+        # print(f'output: {output}')
 
-        return output
+        # return output
 
     
