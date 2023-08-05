@@ -4,7 +4,7 @@ from med_palm.model import MedPalmTokenizer, MedPalm
 
 # Instantiate tokenizer and model
 tokenizer = MedPalmTokenizer()
-model = MedPalm(num_tokens=1024)
+model = MedPalm()
 
 # Load the image
 image = PIL.Image.open('image-9.png')
