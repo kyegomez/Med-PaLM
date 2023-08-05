@@ -347,11 +347,23 @@ class MedPalm(nn.Module):
         try:
                 
             images = images.view(images.size(0), -1)  # Flatten the images
-            images = self.image_resize(images)  # Resize the images using the linear transformation layer
+
+            print(f"Images shape before resize: {images.shape}")
+            if images.size(-1) != self.image_resize.in_features:
+                print(f"Error: images has incorrect shape for image_resize. Expected last dimension: {self.image_resize.in_features}, got: {images.size(-1)}")
+                return None
+            images = self.image_resize(images)
+
             images = images.view(images.size(0), 3, 1024, 1024)  # Reshape the images to the expected size
 
             images = self.perceive(images).squeeze(1)
             print(f"Images perceive: {images}")
+
+            print(f"Images shape before proj: {images.shape}")
+            if images.size(-1) != self.image_proj.in_features:
+                print(f"Error: images has incorrect shape for image_proj. Expected last dimension: {self.image_proj.in_features}, got: {images.size(-1)}")
+                return None
+            images = self.image_proj(images)
 
             images = self.image_proj(images)
             print(f"Images projected: {images}")
