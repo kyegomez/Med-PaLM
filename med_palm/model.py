@@ -6,7 +6,6 @@ from flamingo_pytorch import PerceiverResampler
 from transformers import AutoTokenizer, CLIPModel, CLIPProcessor
 
 from med_palm.palm import PaLM
-import logging
 
 
 class MedPalmTokenizer:
@@ -67,33 +66,50 @@ class MedPalmTokenizer:
             print(f"Error during tokenization {e}")
         
 class MedPalm(nn.Module):
-    def __init__(self):
+    def __init__(self, 
+                 num_tokens: int = 1024, 
+                 dim: int = 2048, 
+                 depth: int = 16, 
+                 dim_head:int =  128, 
+                 heads: int = 8, 
+                 flash_attn: bool = True, 
+                 qk_rmsnorm: bool = False
+                 ):
         super(MedPalm, self).__init__()
+        
+        self.num_tokens = num_tokens
+        self.dim = dim
+        self.depth = depth
+        
+        self.heads = heads
+        self.flash_attn = flash_attn
+        self.qk_rmsnorm = qk_rmsnorm
+
         try:
 
             self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
 
             self.embed = bitsandbytes.nn.modules.Embedding(
-                32002,
-                2048,
+                num_tokens,
+                dim,
                 padding_idx=1
             )
 
             self.output_projection = torch.nn.Linear(
-                2048, 32002, bias=False
+                dim, num_tokens, bias=False
             )
             torch.nn.init.normal_(
-                self.output_projection.weight, mean=0, std=2048**-0.5
+                self.output_projection.weight, mean=0, std=dim**-0.5
             )
 
             self.decoder = PaLM(
-                num_tokens=1024,
-                dim=2048,
-                depth=16,
-                dim_head=128,
-                heads=8,
-                flash_attn=True,
-                qk_rmsnorm=False,
+                num_tokens=num_tokens,
+                dim=dim,
+                depth=depth,
+                dim_head=dim_head,
+                heads=heads,
+                flash_attn=flash_attn,
+                qk_rmsnorm=qk_rmsnorm,
             )
 
             self.perceive = PerceiverResampler(
@@ -106,9 +122,9 @@ class MedPalm(nn.Module):
 
             # self.image_resize = torch.nn.Linear(224 * 224, 1024 * 1024)
 
-            self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
+            self.image_proj = torch.nn.Linear(1024, dim, bias=False)
             torch.nn.init.normal_(
-                self.image_proj.weight, mean=0, std=2048**-0.5
+                self.image_proj.weight, mean=0, std=dim**-0.5
             )
 
         except Exception as e:
