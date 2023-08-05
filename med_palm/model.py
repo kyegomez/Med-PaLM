@@ -345,7 +345,7 @@ class MedPalm(nn.Module):
 
     def forward(self, text_tokens, images):
         try:
-                
+            images = images.mean(dim=1, keepdim=True)
             images = images.view(images.size(0), -1)  # Flatten the images
 
             print(f"Images shape before resize: {images.shape}")
