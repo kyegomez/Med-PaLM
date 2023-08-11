@@ -1,4 +1,6 @@
 # Med-PaLM 🌴🔬
+Welcome to Med-PaLM, your fun-filled, AI-powered friend in the world of biomedicine! 😄🔍
+
 [![GitHub issues](https://img.shields.io/github/issues/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/issues) 
 [![GitHub forks](https://img.shields.io/github/forks/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/network) 
 [![GitHub stars](https://img.shields.io/github/stars/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/stargazers) [![GitHub license](https://img.shields.io/github/license/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/blob/master/LICENSE)
@@ -10,7 +12,6 @@
 [![Share on Pinterest](https://img.shields.io/badge/-Share%20on%20Pinterest-red)](https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fgithub.com%2Fkyegomez%2FMed-Palm&media=https%3A%2F%2Fexample.com%2Fimage.jpg&description=Med-Palm%2C%20the%20Revolutionary%20Robotics%20Model%20that%20will%20Change%20the%20Way%20We%20Work%20%23RT1%20%23Robotics)
 [![Share on WhatsApp](https://img.shields.io/badge/-Share%20on%20WhatsApp-green)](https://api.whatsapp.com/send?text=I%20just%20discovered%20Med-Palm,%20the%20all-new%20robotics%20model%20that%20promises%20to%20revolutionize%20automation.%20Join%20me%20on%20this%20exciting%20journey%20towards%20a%20smarter%20future.%20%23RT1%20%23Robotics%0A%0Ahttps%3A%2F%2Fgithub.com%2Fkyegomez%2FMed-Palm)
 
-Welcome to Med-PaLM, your fun-filled, AI-powered friend in the world of biomedicine! 😄🔍
 
 ![Med palm](image-9.png)
 
