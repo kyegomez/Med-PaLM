@@ -8,3 +8,4 @@ lion-pytorch
 accelerate
 datasets
 deepspeed
+bitsandbytes

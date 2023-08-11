@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
   name = 'MedPalm',
   packages = find_packages(exclude=['examples']),
-  version = '0.0.3',
+  version = '0.0.5',
   license='MIT',
   description = 'MedPalm - Pytorch',
   author = 'Kye Gomez',
@@ -21,6 +21,7 @@ setup(
     "numpy",
     "einops",
     "accelerate",
+    "bitsandbytes",
     "transformers",
     "SentencePiece",
     "datasets",
