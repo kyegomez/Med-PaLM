@@ -67,13 +67,13 @@ Med-PaLM isn't just fun, it's super useful! 🛍️
 
 # Contributing to Med Palm 🤖🌟
 
-First off, big high fives 🙌 and thank you for considering a contribution to Pali! Your help and enthusiasm can truly elevate this project. Whether you're fixing bugs 🐛, adding features 🎁, or just providing feedback, every bit matters! Here's a step-by-step guide to make your contribution journey smooth:
+First off, big high fives 🙌 and thank you for considering a contribution to Med Palm! Your help and enthusiasm can truly elevate this project. Whether you're fixing bugs 🐛, adding features 🎁, or just providing feedback, every bit matters! Here's a step-by-step guide to make your contribution journey smooth:
 
 ## 1. Set the Stage 🎬
 
-**Fork the Repository:** Before you dive in, create a fork of the Pali repository. This gives you your own workspace where you can make changes without affecting the main project.
+**Fork the Repository:** Before you dive in, create a fork of the Med Palm repository. This gives you your own workspace where you can make changes without affecting the main project.
 
-1. Go to the top right corner of the Pali repo.
+1. Go to the top right corner of the Med Palm repo.
 2. Click on the "Fork" button. 
 
 Boom! You now have a copy on your GitHub account.
@@ -82,13 +82,13 @@ Boom! You now have a copy on your GitHub account.
 
 **Clone Your Fork:** 
 ```bash
-git clone https://github.com/YOUR_USERNAME/pali.git
-cd pali
+git clone https://github.com/YOUR_USERNAME/Med-PaLM.git
+cd Med-PaLM
 ```
 
-**Connect with the Main Repo:** To fetch updates from the main Pali repository, set it up as a remote:
+**Connect with the Main Repo:** To fetch updates from the main Med Palm repository, set it up as a remote:
 ```bash
-git remote add upstream https://github.com/original_pali_repo/pali.git
+git remote add upstream https://github.com/kyegomez/Med-PaLM.git
 ```
 
 ## 3. Make Your Magic ✨
@@ -102,7 +102,7 @@ Now, dive into the code and sprinkle your magic!
 
 ## 4. Stay Updated 🔄
 
-While you're working, the main Pali repository might have updates. Keep your local copy in sync:
+While you're working, the main Med Palm repository might have updates. Keep your local copy in sync:
 
 ```bash
 git fetch upstream
@@ -128,7 +128,7 @@ Once you've made your changes:
 
 ## 6. The Review Dance 💃🕺
 
-Once your PR is submitted, our Pali team will review it. They might have questions or feedback. Stay engaged, discuss, and make any needed changes. Collaboration is key! 🤝
+Once your PR is submitted, our team will review it. They might have questions or feedback. Stay engaged, discuss, and make any needed changes. Collaboration is key! 🤝
 
 ## 7. Celebrate & Wait 🎉
 
@@ -138,7 +138,7 @@ After review and any necessary tweaks, your contribution will be merged. Pat you
 
 Share about your contribution with your network. The more the merrier! Plus, it feels good to show off a bit, right? 😉
 
-Remember, every contribution, no matter how small or large, is valued and appreciated. It's the collective effort that makes open-source so vibrant and impactful. Thanks for being a part of the Pali adventure! 🌟🚀
+Remember, every contribution, no matter how small or large, is valued and appreciated. It's the collective effort that makes open-source so vibrant and impactful. Thanks for being a part of the Med Palm adventure! 🌟🚀
 
 ----
 
