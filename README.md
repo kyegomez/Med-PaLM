@@ -1,5 +1,5 @@
 # Med-PaLM 🌴🔬
-Welcome to Med-PaLM, your fun-filled, AI-powered friend in the world of biomedicine! 😄🔍
+The open source implementation of the Multi-Modality model from the research paper "Towards Generalist Biomedical AI"
 
 [![GitHub issues](https://img.shields.io/github/issues/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/issues) 
 [![GitHub forks](https://img.shields.io/github/forks/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/network) 
@@ -17,16 +17,12 @@ Welcome to Med-PaLM, your fun-filled, AI-powered friend in the world of biomedic
 
 ## 🚀 Getting Started
 
-Want to play with Med-PaLM? Awesome! 🥳 Let's get you set up:
-
-1. Grab your own copy:
 ```
 pip install MedPalm
 ```
 
 ## 🧪 How to Use
 
-It's easy-peasy! 🍋
 
 ```python
 import torch
@@ -39,10 +35,8 @@ model = MedPalm()
 text_tokens = torch.tensor([[1, 2, 3, 4, 5]])  # Just an example! Use your own data.
 images = torch.randn(1, 3, 224, 224)  # This too!
 
-# Let Med-PaLM work its magic!
 output = model(text_tokens, images)
 
-# Voila! 🎉
 print(output)
 ```
 📝 Note: Modify the examples to suit your data and project needs.
@@ -82,7 +76,7 @@ Boom! You now have a copy on your GitHub account.
 
 **Clone Your Fork:** 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Med-PaLM.git
+git clone https://github.com/kyegomez/Med-PaLM.git
 cd Med-PaLM
 ```
 
@@ -130,7 +124,7 @@ Once you've made your changes:
 
 Once your PR is submitted, our team will review it. They might have questions or feedback. Stay engaged, discuss, and make any needed changes. Collaboration is key! 🤝
 
-## 7. Celebrate & Wait 🎉
+## 7. Celebrate 🎉
 
 After review and any necessary tweaks, your contribution will be merged. Pat yourself on the back and celebrate! 🎊
 
