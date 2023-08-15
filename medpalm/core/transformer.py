@@ -11,8 +11,8 @@ import torch.nn.functional as F
 from einops import rearrange, repeat
 from torch import Tensor, einsum, nn
 
-from palmecore.attend import Attend, Intermediates
-from palmecore.autoregressive_wrapper import AutoregressiveWrapper
+from medpalm.core.attend import Attend, Intermediates
+from medpalm.core.autoregressive_wrapper import AutoregressiveWrapper
 
 # import bitsandbytes as bnb
 

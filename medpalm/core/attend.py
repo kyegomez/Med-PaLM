@@ -4,11 +4,10 @@ from functools import partial, wraps
 
 import torch
 import torch.nn.functional as F
-from palmecore.flash import attention
 from einops import rearrange
 from packaging import version
+from medpalm.core.flash import attention
 from torch import Tensor, einsum, nn
-
 
 EfficientAttentionConfig = namedtuple('EfficientAttentionConfig', ['enable_flash', 'enable_math', 'enable_mem_efficient'])
 
