@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "med_palm"
+description = "MedPalm - Pytorch"
+version = "0.0.6"
+authors = ["Kye Gomez <kye@apac.ai>"]
+license = "MIT"
+homepage = "https://github.com/kyegomez/med-palm"
+readme = "README.md"
+keywords = ["artificial intelligence", "attention mechanism", "transformers"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.6",
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+torch = "*"
+lion-pytorch = "*"
+numpy = "*"
+einops = "*"
+accelerate = "*"
+bitsandbytes = "*"
+transformers = "*"
+SentencePiece = "*"
+datasets = "*"
+matplotlib = "*"
+deepspeed = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
