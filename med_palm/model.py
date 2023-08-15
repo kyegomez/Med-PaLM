@@ -1,9 +1,16 @@
+
 import torch
 import torch.nn as nn
-from flamingo_pytorch import PerceiverResampler
-from transformers import AutoTokenizer, CLIPModel, CLIPProcessor
+from transformers import AutoTokenizer, CLIPProcessor
 
-from med_palm.palm import PaLM
+from med_palm.core.transformer import (
+    AndromedaEmbedding,
+    AutoregressiveWrapper,
+    Decoder,
+    Transformer,
+    ViTransformerWrapper,
+)
+
 
 class MedPalmTokenizer:
     def __init__(self):
@@ -62,73 +69,101 @@ class MedPalmTokenizer:
         except Exception as e:
             print(f"Error during tokenization {e}")
         
+
 class MedPalm(nn.Module):
-    def __init__(self):
-        super(MedPalm, self).__init__()
+    """
+    Andromeda is a transformer-based model architecture. It initializes with 
+    a Transformer and AutoregressiveWrapper with default or user-specified parameters.
+
+    Initialize the model with specified or default parameters.
+        Args:
+        - num_tokens: Number of tokens in the vocabulary
+        - max_seq_len: Maximum sequence length
+        - dim: Dimension of the model
+        - depth: Depth of the model
+        - dim_head: Dimension of the model head
+        - heads: Number of heads
+        - use_abs_pos_emb: Whether to use absolute position embedding
+        - alibi_pos_bias: Alibi position bias
+        - alibi_num_heads: Number of alibi heads
+        - rotary_xpos: Rotary position
+        - attn_flash: Attention flash
+        - deepnorm: Deep normalization
+        - shift_tokens: Number of tokens to shift
+        - attn_one_kv_head: Attention one key/value head
+        - qk_norm: Query-key normalization
+        - attn_qk_norm: Attention query-key normalization
+        - attn_qk_norm_dim_scale: Attention query-key normalization dimension scale
+        - embedding_provider: Embedding provider module
+    """
+    def __init__(self, 
+                 num_tokens=50432, 
+                 max_seq_len=8192, 
+                 dim=2560, 
+                 depth=32, 
+                 dim_head=128, 
+                 heads=24,
+                 use_abs_pos_emb=False, 
+                 alibi_pos_bias=True, 
+                 alibi_num_heads=12, 
+                 rotary_xpos=True,
+                 attn_flash=True, 
+                 image_size=256,
+                 patch_size=32,
+                 attn_one_kv_head=True,  # multiquery attention
+                 qk_norm=True, 
+                 attn_qk_norm=True, 
+                 attn_qk_norm_dim_scale=True, 
+                 embedding_provider=AndromedaEmbedding()):
+        super(MedPalm).__init__()
+
+        self.encoder = ViTransformerWrapper(
+            image_size=image_size,
+            patch_size=patch_size,
+            attn_layers=Decoder(
+                dim=dim,
+                depth=depth,
+                dim_head=dim_head,
+                heads=heads
+            )
+        )
+
+        self.transformer = Transformer(
+            num_tokens=num_tokens,
+            max_seq_len=max_seq_len,
+            use_abs_pos_emb=use_abs_pos_emb,
+            embedding_provider=embedding_provider,
+            attn_layers=Decoder(
+                dim=dim,
+                depth=depth,
+                dim_head=dim_head,
+                heads=heads,
+                alibi_pos_bias=alibi_pos_bias,
+                alibi_num_heads=alibi_num_heads,
+                rotary_xpos=rotary_xpos,
+                attn_flash=attn_flash,
+                attn_one_kv_head=attn_one_kv_head,
+                qk_norm=qk_norm,
+                attn_qk_norm=attn_qk_norm,
+                attn_qk_norm_dim_scale=attn_qk_norm_dim_scale,
+                cross_attend=True
+            )
+        )
+
+        self.decoder = AutoregressiveWrapper(self.transformer)
+
+    def forward(self, img, text_tokens, **kwargs):
+        """
+        Forward pass through the model. It expects the input text_tokens.
+        Args:
+        - text_tokens: Input tokens
+        - kwargs: Other arguments
+        Returns:
+        - output from the decoder
+        """
         try:
-
-            self.vit_model = CLIPModel.from_pretrained("laion/CLIP-ViT-L-14-laion2B-s32B-b82K").vision_model
-
-            self.output_projection = torch.nn.Linear(
-                2048, 50304, bias=False
-            )
-            torch.nn.init.normal_(
-                self.output_projection.weight, mean=0, std=2048**-0.5
-            )
-
-            self.decoder = PaLM(
-                num_tokens=50304,
-                dim=2048,
-                depth=16,
-                dim_head=128,
-                heads=8,
-                flash_attn=True,
-                qk_rmsnorm=False,
-            )
-
-            self.perceive = PerceiverResampler(
-                dim = 1024,
-                depth = 2,
-                dim_head = 8,
-                num_latents = 64,
-                num_media_embeds = 257
-            )
-
-            self.image_proj = torch.nn.Linear(1024, 2048, bias=False)
-            torch.nn.init.normal_(
-                self.image_proj.weight, mean=0, std=2048**-0.5
-            )
-
-        except Exception as e:
-            print(f"Error initlizing palme components: {e}")
-
-    def forward(self, text_tokens, images):
-        try:
-            # images = images.view(images.size(0), -1)
-            images = self.vit_model(pixel_values=images)["last_hidden_state"]
-
-            # Apply the PerceiverResampler to the images
-            images = self.perceive(images).squeeze(1)
-
-            # Project the images
-            images = self.image_proj(images)
-
-            # Pass the text tokens through the decoder
-            model_input = self.decoder(text_tokens)
-
-            images = images.view(images.size(0), -1, 8)
-
-            # Concatenate the model input and the images
-            model_input = torch.cat([model_input, images], dim=-1)
-
-            # Pass the model input through the decoder
-            model_input = self.decoder(model_input, tokens_mask=None)
-
-            # Get the output from the decoder
-            output = self.decoder(model_input, passed_x=model_input)[0]
-
-            return output
-        
-        except Exception as e:
-            print(f"Error during forward pass: {e}")
-            return None
+            encoded_img = self.encoder(img, return_embeddings=True)
+            return self.decoder(text_tokens, context=encoded_img)
+        except Exception as error:
+            print(f"Failed in forward method: {error}")
+            raise

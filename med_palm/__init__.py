@@ -1,1 +1,1 @@
-from med_palm.model import MedPalmTokenizer, MedPalm
+from med_palm.model import MedPalm
