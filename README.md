@@ -1,5 +1,5 @@
-# Med-PaLM 🌴🔬
-The open source implementation of the Multi-Modality model from the research paper "Towards Generalist Biomedical AI"
+# Med-PaLM 
+"A responsible path to generative AI in healthcare: Unleash the power of Med-PaLM 2 to revolutionize medical knowledge, answer complex questions, and enhance healthcare experiences with accuracy, safety, and equitable practices."
 
 [![GitHub issues](https://img.shields.io/github/issues/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/issues) 
 [![GitHub forks](https://img.shields.io/github/forks/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/network) 
@@ -15,40 +15,30 @@ The open source implementation of the Multi-Modality model from the research pap
 
 ![Med palm](image-9.png)
 
-## 🚀 Getting Started
+## Getting Started
 
 ```
 pip install MedPalm
 ```
 
-## 🧪 How to Use
+## How to Use
 
 
 ```python
 import torch
-from med_palm import MedPalm
+from medpalm.model import MedPalm
 
-# Kick-start the model
+#usage
+img = torch.randn(1, 3, 256, 256)
+caption_tokens = torch.randint(0, 4)
+
 model = MedPalm()
-
-# Let's get some tokenized inputs going
-text_tokens = torch.tensor([[1, 2, 3, 4, 5]])  # Just an example! Use your own data.
-images = torch.randn(1, 3, 224, 224)  # This too!
-
-output = model(text_tokens, images)
-
-print(output)
+output = model(img, caption_tokens)
 ```
 📝 Note: Modify the examples to suit your data and project needs.
 
 ## 📚 Datasets 
 - Wanna deep-dive? [Click here for a dive into dataset strategies](docs/DATASETS.md)
-
-## 🏛️ System Architecture
-
-Med-PaLM is here to be the bridge 🌉 between the vast world of medical data types. From text 📜 to images 🖼️ and even genomic data 🧬, we've got you covered!
-
-Our superstar? A massive multimodal generative model! 🌟 Trained on the swanky MultiMedBench, it's geared to tackle diverse tasks like medical Q&A, mammography interpretation, and even genomic variant calling!
 
 ## 💼 Commercial Use-Cases
 
@@ -136,13 +126,10 @@ Remember, every contribution, no matter how small or large, is valued and apprec
 
 ----
 
+## License
 
-## 📜 License
+Med-PaLM's is under the MIT license. Check out the details [here](LICENSE.md).
 
-Med-PaLM's chillin' under the MIT license. Check out the details [here](LICENSE.md).
+## Citation
 
-## 🎉 A Big Thank You!
-
-A thunderous applause 👏 for the amazing clinicians and data wizards who've made Med-PaLM what it is today. We're on a mission to reshape healthcare, and every bit of your expertise has been invaluable!
-
-So, let's dive into the world of biomedicine with Med-PaLM! 🎈🥳
+Tao Tu, Shekoofeh Azizi, Danny Driess, Mike Schaekermann, Mohamed Amin, Pi-Chuan Chang, Andrew Carroll, Chuck Lau, Ryutaro Tanno, Ira Ktena, Basil Mustafa, Aakanksha Chowdhery, Yun Liu, Simon Kornblith, David Fleet, Philip Mansfield, Sushant Prakash, Renee Wong, Sunny Virmani, Christopher Semturs, S Sara Mahdavi, Bradley Green, Ewa Dominowska, Blaise Aguera y Arcas, Joelle Barral, Dale Webster, Greg S. Corrado, Yossi Matias, Karan Singhal, Pete Florence, Alan Karthikesalingam, Vivek Natarajan. "Towards Generalist Biomedical AI." arXiv:2307.14334 [cs.CL], July 26, 2023.
