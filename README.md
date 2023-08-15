@@ -1,3 +1,5 @@
+[Join Agora](https://discord.gg/qUtxnK2NMf) the community of AI engineers changing the world with their creations.
+
 # Med-PaLM 
 "A responsible path to generative AI in healthcare: Unleash the power of Med-PaLM 2 to revolutionize medical knowledge, answer complex questions, and enhance healthcare experiences with accuracy, safety, and equitable practices."
 
