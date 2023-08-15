@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "med_palm"
+name = "MedPalm"
 description = "MedPalm - Pytorch"
 version = "0.0.6"
 authors = ["Kye Gomez <kye@apac.ai>"]
@@ -32,3 +32,5 @@ deepspeed = "*"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+

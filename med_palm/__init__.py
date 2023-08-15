@@ -1,1 +1,0 @@
-from med_palm.model import MedPalm

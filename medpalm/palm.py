@@ -8,9 +8,9 @@ from einops import pack, rearrange, unpack
 from torch import nn
 from tqdm import tqdm
 
-from med_palm.attention import Attention
-from med_palm.utils import eval_decorator, gumbel_sample, top_k
-from med_palm.lora import Lora
+from medpalm.attention import Attention
+from medpalm.utils import eval_decorator, gumbel_sample, top_k
+from medpalm.lora import Lora
 
 # functions and decorators
 

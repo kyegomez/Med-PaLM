@@ -17,10 +17,10 @@ from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
-from med_palm.optimizer import get_optimizer
-from med_palm.palm import PaLM
-from med_palm.reward import RewardModel
-from med_palm.utils import eval_decorator, masked_mean
+from medpalm.optimizer import get_optimizer
+from medpalm.palm import PaLM
+from medpalm.reward import RewardModel
+from medpalm.utils import eval_decorator, masked_mean
 
 # actor critic - PaLM with lora
 

@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from transformers import AutoTokenizer, CLIPProcessor
 
-from med_palm.core.transformer import (
+from medpalm.core.transformer import (
     AndromedaEmbedding,
     AutoregressiveWrapper,
     Decoder,

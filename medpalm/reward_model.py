@@ -8,8 +8,8 @@ from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 from torch import nn
 
-from med_palm.palm import PaLM
-from med_palm.utils import gumbel_sample, masked_mean
+from medpalm.palm import PaLM
+from medpalm.utils import gumbel_sample, masked_mean
 
 # helper functions
 
