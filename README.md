@@ -21,7 +21,7 @@
 pip install MedPalm
 ```
 
-## How to Use
+## Usage
 
 
 ```python
