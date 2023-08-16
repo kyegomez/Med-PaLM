@@ -2,7 +2,7 @@
 
 
 # Med-PaLM 
-"A responsible path to generative AI in healthcare: Unleash the power of Med-PaLM 2 to revolutionize medical knowledge, answer complex questions, and enhance healthcare experiences with accuracy, safety, and equitable practices."
+A responsible path to generative AI in healthcare: Unleash the power of Med-PaLM 2 to revolutionize medical knowledge, answer complex questions, and enhance healthcare experiences with accuracy, safety, and equitable practices.
 
 [![GitHub issues](https://img.shields.io/github/issues/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/issues) 
 [![GitHub forks](https://img.shields.io/github/forks/kyegomez/Med-Palm)](https://github.com/kyegomez/Med-Palm/network) 
