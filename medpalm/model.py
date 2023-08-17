@@ -7,6 +7,7 @@ from medpalm.core.transformer import (
     AndromedaEmbedding,
     AutoregressiveWrapper,
     Decoder,
+    Encoder,
     Transformer,
     ViTransformerWrapper,
 )
@@ -120,7 +121,7 @@ class MedPalm(nn.Module):
         self.encoder = ViTransformerWrapper(
             image_size=image_size,
             patch_size=patch_size,
-            attn_layers=Decoder(
+            attn_layers=Encoder(
                 dim=dim,
                 depth=depth,
                 dim_head=dim_head,
@@ -162,9 +163,6 @@ class MedPalm(nn.Module):
         - output from the decoder
         """
         try:
-            # encoded_img = self.encoder(img, return_embeddings=True)
-            # return self.decoder(text_tokens, context=encoded_img)
-
             encoded = self.encoder(img, return_embeddings=True)
             return self.decoder(text_tokens, context=encoded)
         except Exception as error:
