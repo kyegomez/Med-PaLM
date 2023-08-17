@@ -162,8 +162,11 @@ class MedPalm(nn.Module):
         - output from the decoder
         """
         try:
-            encoded_img = self.encoder(img, return_embeddings=True)
-            return self.decoder(text_tokens, context=encoded_img)
+            # encoded_img = self.encoder(img, return_embeddings=True)
+            # return self.decoder(text_tokens, context=encoded_img)
+
+            encoded = self.encoder(img, return_embeddings=True)
+            return self.decoder(text_tokens, context=encoded)
         except Exception as error:
             print(f"Failed in forward method: {error}")
             raise
