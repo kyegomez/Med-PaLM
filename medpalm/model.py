@@ -118,6 +118,8 @@ class MedPalm(nn.Module):
                  embedding_provider=AndromedaEmbedding()):
         super(MedPalm).__init__()
 
+        self.encoder = None
+
         self.encoder = ViTransformerWrapper(
             image_size=image_size,
             patch_size=patch_size,
