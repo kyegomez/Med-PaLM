@@ -116,7 +116,7 @@ class MedPalm(nn.Module):
                  attn_qk_norm=True, 
                  attn_qk_norm_dim_scale=True, 
                  embedding_provider=AndromedaEmbedding()):
-        super(MedPalm).__init__()
+        super().__init__()
 
         self.encoder = None
 
