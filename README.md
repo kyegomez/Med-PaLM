@@ -29,23 +29,25 @@ pip install MedPalm
 
 ```python
 import torch
-from medpalm.model import MedPalm
+from medpalm import MedPalm
 
 #usage
 img = torch.randn(1, 3, 256, 256)
-caption_tokens = torch.randint(0, 4)
+text = torch.randint(0, 20000, (1, 1024))
+
 
 model = MedPalm()
-output = model(img, caption_tokens)
+output = model(text, img)
 ```
 📝 Note: Modify the examples to suit your data and project needs.
 
 ## 📚 Datasets 
-- Wanna deep-dive? [Click here for a dive into dataset strategies](docs/DATASETS.md)
+- deep-dive into the datasets used in the paper! [Click here for a dive into dataset strategies](docs/DATASETS.md)
 
 ## 💼 Commercial Use-Cases
 
-Med-PaLM isn't just fun, it's super useful! 🛍️
+Med Palm has thousands of potential use cases the 3 below are simple, for more detailed applications check out my new blog article on MedPalm's use in the real world. [Click here to learn more](https://medium.com/@kyeg/how-medpalm-is-revolutionizing-medicine-62eef979f0e5)
+
 - **Clinical Diagnostics**: Combining medical imaging, patient tales 📖, and genes, we're aiming for top-notch diagnostic solutions.
   
 - **Healthcare Research**: Dive deep into diverse datasets and discover something new with Med-PaLM by your side! 🤿
