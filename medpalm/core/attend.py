@@ -6,7 +6,6 @@ import torch
 import torch.nn.functional as F
 from einops import rearrange
 from packaging import version
-from medpalm.core.flash import attention
 from torch import Tensor, einsum, nn
 
 EfficientAttentionConfig = namedtuple('EfficientAttentionConfig', ['enable_flash', 'enable_math', 'enable_mem_efficient'])
@@ -193,8 +192,6 @@ class Attend(nn.Module):
             return self.flash_attn(q, k, v, mask = mask, attn_bias = attn_bias)
             # return FlashAttention(q, k, v, mask=mask, attn_bias=attn_bias )
 
-        if self.triton:
-            return attention(q, k, v, self.casual, scale)
 
         kv_einsum_eq = 'b j d' if k.ndim == 3 else 'b h j d'
 
