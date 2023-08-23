@@ -155,7 +155,7 @@ class MedPalm(nn.Module):
 
         self.decoder = AutoregressiveWrapper(self.transformer)
 
-    def forward(self, img, text_tokens, **kwargs):
+    def forward(self, text_tokens, img, **kwargs):
         """
         Forward pass through the model. It expects the input text_tokens.
         Args:
