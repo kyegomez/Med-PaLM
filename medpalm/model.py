@@ -4,7 +4,6 @@ import torch.nn as nn
 from transformers import AutoTokenizer, CLIPProcessor
 
 from medpalm.core.transformer import (
-    AndromedaEmbedding,
     AutoregressiveWrapper,
     Decoder,
     Encoder,
@@ -73,7 +72,7 @@ class MedPalmTokenizer:
 
 class MedPalm(nn.Module):
     """
-    Andromeda is a transformer-based model architecture. It initializes with 
+    MedPalm is a transformer-based model architecture. It initializes with 
     a Transformer and AutoregressiveWrapper with default or user-specified parameters.
 
     Initialize the model with specified or default parameters.
@@ -98,8 +97,8 @@ class MedPalm(nn.Module):
         - embedding_provider: Embedding provider module
     """
     def __init__(self, 
-                 num_tokens=50432, 
-                 max_seq_len=8192, 
+                 num_tokens=20000, 
+                 max_seq_len=4096, 
                  dim=2560, 
                  depth=32, 
                  dim_head=128, 
@@ -115,10 +114,8 @@ class MedPalm(nn.Module):
                  qk_norm=True, 
                  attn_qk_norm=True, 
                  attn_qk_norm_dim_scale=True, 
-                 embedding_provider=AndromedaEmbedding()):
+                 ):
         super().__init__()
-
-        self.encoder = None
 
         self.encoder = ViTransformerWrapper(
             image_size=image_size,
@@ -130,12 +127,12 @@ class MedPalm(nn.Module):
                 heads=heads
             )
         )
+        # self.encoder.init()
 
-        self.transformer = Transformer(
+        self.decoder = Transformer(
             num_tokens=num_tokens,
             max_seq_len=max_seq_len,
             use_abs_pos_emb=use_abs_pos_emb,
-            embedding_provider=embedding_provider,
             attn_layers=Decoder(
                 dim=dim,
                 depth=depth,
@@ -153,7 +150,7 @@ class MedPalm(nn.Module):
             )
         )
 
-        self.decoder = AutoregressiveWrapper(self.transformer)
+        self.decoder = AutoregressiveWrapper(self.decoder)
 
     def forward(self, text_tokens, img, **kwargs):
         """
@@ -165,7 +162,9 @@ class MedPalm(nn.Module):
         - output from the decoder
         """
         try:
+            print(f"Text tokens shape: {text_tokens.shape}")
             encoded = self.encoder(img, return_embeddings=True)
+            print(encoded.shape)
             return self.decoder(text_tokens, context=encoded)
         except Exception as error:
             print(f"Failed in forward method: {error}")

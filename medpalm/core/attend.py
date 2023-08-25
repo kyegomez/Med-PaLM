@@ -1,20 +1,29 @@
-from collections import namedtuple
-from dataclasses import dataclass
-from functools import partial, wraps
+from functools import partial
+from typing import Optional
 
 import torch
+from torch import nn, einsum, Tensor
 import torch.nn.functional as F
-from einops import rearrange
+
+from collections import namedtuple
+from functools import wraps
 from packaging import version
-from torch import Tensor, einsum, nn
+from dataclasses import dataclass
+
+from einops import rearrange
+
+# constants
 
 EfficientAttentionConfig = namedtuple('EfficientAttentionConfig', ['enable_flash', 'enable_math', 'enable_mem_efficient'])
 
 @dataclass
 class Intermediates:
-    qk_similarities: Tensor = None
-    pre_softmax_attn: Tensor = None
-    post_softmax_attn: Tensor = None
+    qk_similarities: Optional[Tensor] = None
+    pre_softmax_attn: Optional[Tensor] = None
+    post_softmax_attn: Optional[Tensor] = None
+
+    def to_tuple(self):
+        return (self.qk_similarities, self.pre_softmax_attn, self.post_softmax_attn)
 
 # helpers
 
@@ -23,6 +32,9 @@ def exists(val):
 
 def default(val, d):
     return val if exists(val) else d
+
+def compact(arr):
+    return [*filter(exists, arr)]
 
 def once(fn):
     called = False
@@ -37,6 +49,18 @@ def once(fn):
 
 print_once = once(print)
 
+# functions for creating causal mask
+# need a special one for onnx cpu (no support for .triu)
+
+def create_causal_mask(i, j, device):
+    return torch.ones((i, j), device = device, dtype = torch.bool).triu(j - i + 1)
+
+def onnx_create_causal_mask(i, j, device):
+    r = torch.arange(i, device = device)
+    causal_mask = rearrange(r, 'i -> i 1') < rearrange(r, 'j -> 1 j')
+    causal_mask = F.pad(causal_mask, (j - i, 0), value = False)
+    return causal_mask
+
 # main class
 
 class Attend(nn.Module):
@@ -47,15 +71,20 @@ class Attend(nn.Module):
         causal = False,
         heads = None,
         talking_heads = False,
+        sparse_topk = None,
         scale = None,
         qk_norm = False,
         flash = False,
-        triton = False,
+        add_zero_kv = False,
+        onnxable = False
     ):
         super().__init__()
         self.scale = scale
         self.qk_norm = qk_norm
+
         self.causal = causal
+        self.create_causal_mask = onnx_create_causal_mask if onnxable else create_causal_mask
+
         self.attn_fn = partial(F.softmax, dtype = torch.float32) if not qk_norm else F.softmax
 
         self.dropout = dropout
@@ -70,11 +99,23 @@ class Attend(nn.Module):
             self.pre_softmax_talking_heads = nn.Conv2d(heads, heads, 1, bias = False)
             self.post_softmax_talking_heads = nn.Conv2d(heads, heads, 1, bias = False)
 
+        # sparse topk
+
+        assert not (flash and sparse_topk), 'sparse topk not compatible with flash attention'
+        self.sparse_topk = sparse_topk
+
+        # add a key / value token composed of zeros
+        # in case this helps controlling outliers, proposed by https://www.evanmiller.org/attention-is-off-by-one.html
+
+        self.add_zero_kv = add_zero_kv
+
         # flash attention
+
         self.flash = flash
         assert not (flash and version.parse(torch.__version__) < version.parse('2.0.0')), 'in order to use flash attention, you must be using pytorch 2.0 or above'
 
         # determine efficient attention configs for cuda and cpu
+
         self.cpu_config = EfficientAttentionConfig(True, True, True)
         self.cuda_config = None
 
@@ -125,15 +166,15 @@ class Attend(nn.Module):
             # manually handle causal mask, if another mask was given
 
             if causal:
-                causal_mask = torch.ones((q_len, k_len), dtype = torch.bool, device = device).triu(k_len - q_len + 1)
-                mask = mask | causal_mask
+                causal_mask = self.create_causal_mask(q_len, k_len, device = device)
+                mask = mask & ~causal_mask
                 causal = False
 
         # handle alibi positional bias
         # convert from bool to float
 
         if exists(attn_bias):
-            attn_bias = rearrange(attn_bias, 'h i j -> 1 h i j').expand(batch, -1, -1, -1)
+            attn_bias = rearrange(attn_bias, 'h i j -> 1 h i j').expand(batch, heads, -1, -1)
 
             # if mask given, the mask would already contain the causal mask from above logic
             # otherwise, if no mask given but still causal, mask out alibi positional bias to a large negative number
@@ -141,9 +182,9 @@ class Attend(nn.Module):
             mask_value = -torch.finfo(q.dtype).max
 
             if exists(mask):
-                attn_bias = attn_bias.masked_fill(mask, mask_value // 2)
+                attn_bias = attn_bias.masked_fill(~mask, mask_value // 2)
             elif causal:
-                causal_mask = torch.ones((q_len, k_len), dtype = torch.bool, device = device).triu(k_len - q_len + 1)
+                causal_mask = self.create_causal_mask(q_len, k_len, device = device)
                 attn_bias = attn_bias.masked_fill(causal_mask, mask_value // 2)
                 causal = False
 
@@ -187,11 +228,18 @@ class Attend(nn.Module):
 
         scale = default(self.scale, q.shape[-1] ** -0.5)
 
+        if self.add_zero_kv:
+            k, v = map(lambda t: F.pad(t, (0, 0, 1, 0), value = 0.), (k, v))
+
+            if exists(mask):
+                mask = F.pad(mask, (1, 0), value = True)
+
+            if exists(attn_bias):
+                attn_bias = F.pad(attn_bias, (1, 0), value = 0.)
+
         if self.flash:
             assert not exists(prev_attn), 'residual attention not compatible with flash attention'
             return self.flash_attn(q, k, v, mask = mask, attn_bias = attn_bias)
-            # return FlashAttention(q, k, v, mask=mask, attn_bias=attn_bias )
-
 
         kv_einsum_eq = 'b j d' if k.ndim == 3 else 'b h j d'
 
@@ -208,18 +256,23 @@ class Attend(nn.Module):
         if exists(attn_bias):
             dots = dots + attn_bias
 
-        dtype = dots.dtype
-        pre_softmax_attn = dots.clone()
+        i, j, dtype = *dots.shape[-2:], dots.dtype
 
         mask_value = -torch.finfo(dots.dtype).max
 
+        if exists(self.sparse_topk) and self.sparse_topk < j:
+            top_values, _ = dots.topk(self.sparse_topk, dim = -1)
+            sparse_topk_mask = dots < top_values[..., -1:]
+            mask = (mask & sparse_topk_mask) if exists(mask) else sparse_topk_mask
+
         if exists(mask):
-            dots = dots.masked_fill(mask, mask_value)
+            dots = dots.masked_fill(~mask, mask_value)
 
         if self.causal:
-            i, j = dots.shape[-2:]
-            causal_mask = torch.ones((i, j), dtype = torch.bool, device = device).triu(j - i + 1)
+            causal_mask = self.create_causal_mask(i, j, device = device)
             dots = dots.masked_fill(causal_mask, mask_value)
+
+        pre_softmax_attn = dots.clone()
 
         attn = self.attn_fn(dots, dim = -1)
         attn = attn.type(dtype)
@@ -240,3 +293,79 @@ class Attend(nn.Module):
         )
 
         return out, intermediates
+
+# cascading heads logic
+
+def to_single_heads(t, dim = 1):
+    heads = t.unbind(dim = dim)
+    return tuple(head.unsqueeze(dim) for head in heads)
+
+class CascadingHeads(nn.Module):
+    def __init__(self, attend: Attend):
+        super().__init__()
+        self.attend = attend
+
+    def forward(
+        self,
+        q, k, v,
+        mask = None,
+        attn_bias = None,
+        prev_attn = None
+    ):
+        assert q.shape[-1] == v.shape[-1], 'cascading heads can only be done if query / key and value head dimensions are the same'
+
+        # split inputs into per-head inputs
+
+        heads = q.shape[1]
+
+        queries = to_single_heads(q)
+        keys = to_single_heads(k) if k.ndim == 4 else ((k,) * heads)
+        values = to_single_heads(v) if v.ndim == 4 else ((v,) * heads)
+
+        mask = (mask,) * heads
+
+        attn_bias = to_single_heads(attn_bias, dim = 0) if exists(attn_bias) else ((None,) * heads)
+        prev_attn = to_single_heads(prev_attn) if exists(prev_attn) else ((None,) * heads)
+
+        # now loop through each head, without output of previous head summed with the next head
+        # thus cascading
+
+        all_outs = []
+        all_intermediates = []
+
+        prev_head_out = None
+
+        for h_q, h_k, h_v, h_mask, h_attn_bias, h_prev_attn in zip(queries, keys, values, mask, attn_bias, prev_attn):
+
+            if exists(prev_head_out):
+                h_q = h_q + prev_head_out
+
+            out, intermediates = self.attend(
+                h_q, h_k, h_v,
+                mask = h_mask,
+                attn_bias = h_attn_bias,
+                prev_attn = h_prev_attn
+            )
+
+            prev_head_out = out
+
+            all_outs.append(out)
+            all_intermediates.append(intermediates)
+
+        # cat all output heads
+
+        all_outs = torch.cat(all_outs, dim = 1)
+
+        # cat all intermediates, if they exist
+
+        qk_similarities, pre_softmax_attn, post_softmax_attn = zip(*map(lambda i: i.to_tuple(), all_intermediates))
+
+        qk_similarities, pre_softmax_attn, post_softmax_attn = map(compact, (qk_similarities, pre_softmax_attn, post_softmax_attn))
+
+        aggregated_intermediates = Intermediates(
+            qk_similarities = torch.cat(qk_similarities, dim = 1) if len(qk_similarities) > 0 else None,
+            pre_softmax_attn = torch.cat(pre_softmax_attn, dim = 1) if len(pre_softmax_attn) > 0 else None,
+            post_softmax_attn = torch.cat(post_softmax_attn, dim = 1) if len(post_softmax_attn) > 0 else None
+        )
+
+        return all_outs, aggregated_intermediates
