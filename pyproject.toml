@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "MedPalm"
 description = "MedPalm - Pytorch"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Kye Gomez <kye@apac.ai>"]
 license = "MIT"
 homepage = "https://github.com/kyegomez/med-palm"
