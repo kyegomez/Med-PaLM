@@ -202,7 +202,7 @@ class MedPalm(torch.nn.Module):
             )
         )
 
-        self.decoder = TransformerWrapper(
+        self.decoder = Transformer(
             num_tokens=num_tokens,
             max_seq_len=max_seq_len,
             use_abs_pos_emb=use_abs_pos_emb,
@@ -219,9 +219,9 @@ class MedPalm(torch.nn.Module):
             )
         )
 
-    def forward(self, img, caption):
+    def forward(self, img, text):
         encoded = self.encoder(img, return_embeddings=True)
-        return self.decoder(caption, context=encoded)
+        return self.decoder(text, context=encoded)
 
 
 # # Testing the MedPalm class
