@@ -141,10 +141,10 @@ class MedPalm(nn.Module):
                 alibi_num_heads=alibi_num_heads,
                 rotary_xpos=rotary_xpos,
                 attn_flash=attn_flash,
-                attn_one_kv_head=attn_one_kv_head,
+                attn_one_kv_head=False,
                 qk_norm=qk_norm,
-                attn_qk_norm=attn_qk_norm,
-                attn_qk_norm_dim_scale=attn_qk_norm_dim_scale,
+                attn_qk_norm=False,
+                attn_qk_norm_dim_scale=False,
                 cross_attend=True
             )
         )
