@@ -110,10 +110,10 @@ class MedPalm(nn.Module):
                  attn_flash=True, 
                  image_size=256,
                  patch_size=32,
-                 attn_one_kv_head=True,  # multiquery attention
+                 attn_one_kv_head=False,  # multiquery attention
                  qk_norm=True, 
-                 attn_qk_norm=True, 
-                 attn_qk_norm_dim_scale=True, 
+                 attn_qk_norm=False, 
+                 attn_qk_norm_dim_scale=False, 
                  ):
         super(MedPalm, self).__init__()
 
@@ -149,7 +149,7 @@ class MedPalm(nn.Module):
             )
         )
 
-        self.decoder = AutoregressiveWrapper(self.decoder)
+        # self.decoder = AutoregressiveWrapper(self.decoder)
 
     def forward(self, text_tokens, img, **kwargs):
         """
