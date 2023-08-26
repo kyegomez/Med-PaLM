@@ -70,7 +70,7 @@ class MedPalmTokenizer:
             print(f"Error during tokenization {e}")
         
 
-class MedPalm(nn.Module):
+class MedPalm:
     """
     MedPalm is a transformer-based model architecture. It initializes with 
     a Transformer and AutoregressiveWrapper with default or user-specified parameters.
@@ -127,7 +127,6 @@ class MedPalm(nn.Module):
                 heads=heads
             )
         )
-        # self.encoder.init()
 
         self.decoder = Transformer(
             num_tokens=num_tokens,
