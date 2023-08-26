@@ -115,7 +115,7 @@ class MedPalm:
                  attn_qk_norm=True, 
                  attn_qk_norm_dim_scale=True, 
                  ):
-        super().__init__()
+        # super().__init__()
 
         self.encoder = ViTransformerWrapper(
             image_size=image_size,
