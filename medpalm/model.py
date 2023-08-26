@@ -220,14 +220,11 @@ class MedPalm(torch.nn.Module):
         )
 
     def forward(self, img, text):
-        encoded = self.encoder(img, return_embeddings=True)
-        return self.decoder(text, context=encoded)
+        try:    
+            encoded = self.encoder(img, return_embeddings=True)
+            return self.decoder(text, context=encoded)
+        except Exception as error:
+            print(f"Failed in forward method: {error}")
+            raise
 
 
-# # Testing the MedPalm class
-# img = torch.randn(1, 3, 256, 256)
-# caption = torch.randint(0, 20000, (1, 1024))
-
-# model = MedPalm()
-# output = model(img, caption)
-# print(output.shape) # (1, 1024, 20000)
