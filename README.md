@@ -42,7 +42,29 @@ print(output.shape)
 📝 Note: Modify the examples to suit your data and project needs.
 
 ## 📚 Datasets 
-- deep-dive into the datasets used in the paper! [Click here for a dive into dataset strategies](docs/DATASETS.md)
+Here is a comprehensive markdown table containing metadata and details for all the datasets mentioned in the MED PALM paper
+
+| Dataset | Modality | Description | # Training examples | # Test examples | Tasks |
+|-|-|-|-|-|-|
+| MultiMedBench | Multimodal | Benchmark for biomedical AI | | | 14 biomedical tasks |
+| MedQA | Text | US licensing exam questions | 10,178 | 1,273 | Question answering |
+| MedMCQA | Text | Indian medical exam questions | 182,822 | 4,183 | Question answering |
+| PubMedQA | Text | Biomedical literature questions | 0 | 500 | Question answering |  
+| MIMIC-III | Radiology reports | Radiology reports for ICU patients | 58,405 reports | 13,057 reports | Report summarization |
+| VQA-RAD | Radiology images | QA pairs on radiology images | 1,797 QA pairs | 451 QA pairs | Visual question answering |
+| Slake-VQA | Radiology images | English-Chinese QA pairs | 9,849 samples | 2,070 samples | Visual question answering |
+| Path-VQA | Pathology images | QA pairs on pathology images | 19,755 QA pairs | 6,761 QA pairs | Visual question answering |
+| MIMIC-CXR | Chest X-ray | Images and reports | 353,542 | 4,834 | Report generation, classification |  
+| PAD-UFES-20 | Dermatology images | Skin lesion smartphone images | 1,838 images | 460 images | Image classification |
+| CBIS-DDSM (mass) | Mammography | Mammogram mass patches | 1,318 images | 378 images | Image classification |
+| CBIS-DDSM (calcification) | Mammography | Mammogram calcification patches | 1,544 images | 326 images | Image classification |
+| VinDr-Mammo | Mammography | Mammogram studies | 16,000 images | 4,000 images | Image classification |
+| PrecisionFDA (training) | Genomics | Genomic variant images | 197,038 images | | Image classification |
+| PrecisionFDA (evaluation) | Genomics | Genomic variant images | | 13,030 images | Image classification |
+| Montgomery County | Chest X-ray | Chest X-rays | 0 | 138 images | TB detection evaluation |  
+| MIMIC-CXR (human evaluation) | Chest X-ray | Chest X-ray images and reports | | 246 cases | Human evaluation |
+
+---
 
 ## 💼 Commercial Use-Cases
 
@@ -56,78 +78,7 @@ Med Palm has thousands of potential use cases the 3 below are simple, for more d
 
 # Contributing to Med Palm 🤖🌟
 
-First off, big high fives 🙌 and thank you for considering a contribution to Med Palm! Your help and enthusiasm can truly elevate this project. Whether you're fixing bugs 🐛, adding features 🎁, or just providing feedback, every bit matters! Here's a step-by-step guide to make your contribution journey smooth:
-
-## 1. Set the Stage 🎬
-
-**Fork the Repository:** Before you dive in, create a fork of the Med Palm repository. This gives you your own workspace where you can make changes without affecting the main project.
-
-1. Go to the top right corner of the Med Palm repo.
-2. Click on the "Fork" button. 
-
-Boom! You now have a copy on your GitHub account.
-
-## 2. Clone & Set Up 🚀
-
-**Clone Your Fork:** 
-```bash
-git clone https://github.com/kyegomez/Med-PaLM.git
-cd Med-PaLM
-```
-
-**Connect with the Main Repo:** To fetch updates from the main Med Palm repository, set it up as a remote:
-```bash
-git remote add upstream https://github.com/kyegomez/Med-PaLM.git
-```
-
-## 3. Make Your Magic ✨
-
-Create a new branch for your feature, bugfix, or whatever you're looking to contribute:
-```bash
-git checkout -b feature/my-awesome-feature
-```
-
-Now, dive into the code and sprinkle your magic!
-
-## 4. Stay Updated 🔄
-
-While you're working, the main Med Palm repository might have updates. Keep your local copy in sync:
-
-```bash
-git fetch upstream
-git merge upstream/main
-```
-
-## 5. Share Your Brilliance 🎁
-
-Once you've made your changes:
-
-1. **Stage & Commit:**
-   ```bash
-   git add .
-   git commit -m "Add my awesome feature"
-   ```
-
-2. **Push to Your Fork:**
-   ```bash
-   git push origin feature/my-awesome-feature
-   ```
-
-3. **Create a Pull Request:** Head back to your fork on GitHub, and you'll see a "New Pull Request" button. Click on it!
-
-## 6. The Review Dance 💃🕺
-
-Once your PR is submitted, our team will review it. They might have questions or feedback. Stay engaged, discuss, and make any needed changes. Collaboration is key! 🤝
-
-## 7. Celebrate 🎉
-
-After review and any necessary tweaks, your contribution will be merged. Pat yourself on the back and celebrate! 🎊
-
-## 8. Spread the Word 📢
-
-Share about your contribution with your network. The more the merrier! Plus, it feels good to show off a bit, right? 😉
-
-Remember, every contribution, no matter how small or large, is valued and appreciated. It's the collective effort that makes open-source so vibrant and impactful. Thanks for being a part of the Med Palm adventure! 🌟🚀
+First off, big high fives 🙌 and thank you for considering a contribution to Med Palm! Your help and enthusiasm can truly elevate this project. Whether you're fixing bugs 🐛, adding features 🎁, or just providing feedback, every bit matters! We need help with the training strategy and scripts and more! 
 
 ----
 
@@ -136,5 +87,11 @@ Remember, every contribution, no matter how small or large, is valued and apprec
 Med-PaLM's is under the MIT license. Check out the details [here](LICENSE.md).
 
 ## Citation
-
-Tao Tu, Shekoofeh Azizi, Danny Driess, Mike Schaekermann, Mohamed Amin, Pi-Chuan Chang, Andrew Carroll, Chuck Lau, Ryutaro Tanno, Ira Ktena, Basil Mustafa, Aakanksha Chowdhery, Yun Liu, Simon Kornblith, David Fleet, Philip Mansfield, Sushant Prakash, Renee Wong, Sunny Virmani, Christopher Semturs, S Sara Mahdavi, Bradley Green, Ewa Dominowska, Blaise Aguera y Arcas, Joelle Barral, Dale Webster, Greg S. Corrado, Yossi Matias, Karan Singhal, Pete Florence, Alan Karthikesalingam, Vivek Natarajan. "Towards Generalist Biomedical AI." arXiv:2307.14334 [cs.CL], July 26, 2023.
+```bibtex
+@misc{2307.14334,
+Author = {Tao Tu and Shekoofeh Azizi and Danny Driess and Mike Schaekermann and Mohamed Amin and Pi-Chuan Chang and Andrew Carroll and Chuck Lau and Ryutaro Tanno and Ira Ktena and Basil Mustafa and Aakanksha Chowdhery and Yun Liu and Simon Kornblith and David Fleet and Philip Mansfield and Sushant Prakash and Renee Wong and Sunny Virmani and Christopher Semturs and S Sara Mahdavi and Bradley Green and Ewa Dominowska and Blaise Aguera y Arcas and Joelle Barral and Dale Webster and Greg S. Corrado and Yossi Matias and Karan Singhal and Pete Florence and Alan Karthikesalingam and Vivek Natarajan},
+Title = {Towards Generalist Biomedical AI},
+Year = {2023},
+Eprint = {arXiv:2307.14334},
+}
+```
