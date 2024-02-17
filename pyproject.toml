@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "MedPalm"
 description = "MedPalm - Pytorch"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Kye Gomez <kye@apac.ai>"]
 license = "MIT"
 homepage = "https://github.com/kyegomez/med-palm"
@@ -28,4 +28,29 @@ datasets = "*"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+
+
+[tool.poetry.group.lint.dependencies]
+ruff = ">=0.0.249,<0.1.7"
+types-toml = "^0.10.8.1"
+types-pytz = "^2023.3.0.0"
+black = "^23.1.0"
+types-chardet = "^5.0.4.6"
+mypy-protobuf = "^3.0.0"
+
+
+[tool.autopep8]
+max_line_length = 70
+ignore = "E501,W6"  # or ["E501", "W6"]
+in-place = true
+recursive = true
+aggressive = 3
+
+[tool.ruff]
+line-length = 70
+
+[tool.black]
+line-length = 70
+target-version = ['py38']
+preview = true
 

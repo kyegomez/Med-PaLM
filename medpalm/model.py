@@ -25,8 +25,10 @@ class MedPalmTokenizer:
                 model_max_length=8192,
             )
 
-            self.im_idx, self.im_end_idx = self.tokenizer.convert_tokens_to_ids(
-                ["<image>", "</image>"]
+            self.im_idx, self.im_end_idx = (
+                self.tokenizer.convert_tokens_to_ids(
+                    ["<image>", "</image>"]
+                )
             )
         except Exception as e:
             print(f"Error init tokenizer: {e}")
@@ -34,12 +36,20 @@ class MedPalmTokenizer:
     def tokenize_texts(self, texts):
         try:
             texts = self.tokenizer(
-                texts, return_tensors="pt", padding=True, truncation=True
+                texts,
+                return_tensors="pt",
+                padding=True,
+                truncation=True,
             ).input_ids
             image_tokens = torch.tensor(
                 [[self.im_idx, self.im_end_idx]] * texts.shape[0]
             )
-            return torch.cat([texts[:, 0:1], image_tokens, texts[:, 1:]], dim=1), texts
+            return (
+                torch.cat(
+                    [texts[:, 0:1], image_tokens, texts[:, 1:]], dim=1
+                ),
+                texts,
+            )
         except Exception as e:
             print(f"Error tokenizing texts: {e}")
 
@@ -56,10 +66,18 @@ class MedPalmTokenizer:
 
     def tokenize(self, sample):
         try:
-            text_tokens, only_text_tokens = self.tokenize_texts(sample["target_text"])
-            attention_mask = text_tokens != self.tokenizer.pad_token_id
-            dummy_image_features = torch.ones((text_tokens.shape[0], 64))
-            attention_mask = torch.cat([dummy_image_features, attention_mask], dim=1)
+            text_tokens, only_text_tokens = self.tokenize_texts(
+                sample["target_text"]
+            )
+            attention_mask = (
+                text_tokens != self.tokenizer.pad_token_id
+            )
+            dummy_image_features = torch.ones(
+                (text_tokens.shape[0], 64)
+            )
+            attention_mask = torch.cat(
+                [dummy_image_features, attention_mask], dim=1
+            )
             return {
                 "text_tokens": text_tokens,
                 "images": self.tokenize_images(sample["image"]),
@@ -121,7 +139,9 @@ class MedPalm(torch.nn.Module):
             image_size=image_size,
             patch_size=patch_size,
             attn_layers=Encoder(
-                dim=encoder_dim, depth=encoder_depth, heads=encoder_heads
+                dim=encoder_dim,
+                depth=encoder_depth,
+                heads=encoder_heads,
             ),
         )
 
