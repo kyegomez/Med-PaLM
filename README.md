@@ -77,8 +77,7 @@ Med Palm has thousands of potential use cases the 3 below are simple, for more d
 - **Telemedicine**: Quick, reliable, and remote! 🌍 Med-PaLM's here to revolutionize telehealth.
 
 # Contributing to Med Palm 🤖🌟
-
-First off, big high fives 🙌 and thank you for considering a contribution to Med Palm! Your help and enthusiasm can truly elevate this project. Whether you're fixing bugs 🐛, adding features 🎁, or just providing feedback, every bit matters! We need help with the training strategy and scripts and more! 
+Help with the todo list!
 
 ----
 
@@ -95,3 +94,7 @@ Year = {2023},
 Eprint = {arXiv:2307.14334},
 }
 ```
+
+## Todo
+- [ ] Implement a training script using Huggingface's accelerate and deepspeed
+- [
