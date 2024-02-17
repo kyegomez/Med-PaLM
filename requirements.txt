@@ -2,10 +2,4 @@ torch
 transformers
 einops
 beartype
-
-flamingo-pytorch
-lion-pytorch
-accelerate
-datasets
-deepspeed
-bitsandbytes
+zetascale
